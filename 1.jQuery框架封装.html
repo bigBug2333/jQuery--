@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div>11</div>
+    <div>22</div>
+    <div>33</div>
+    <script>
+        // 1.沙箱
+        // 2.对外暴露jQuery
+        // 3.定义elements绑定给this
+        // 4.替换原型
+        // 5.工厂函数
+        // 6.在工厂函数内部new构造函数
+        // 7.init原型给jQuery原型
+
+
+        (function () {
+            var version = '1.1.1';
+            var arr = [];
+            var push = arr.push;
+            var splice = arr.splice;
+        // 工厂函数
+        var jQuery = function (selector) {
+            //在工厂函数内部new构造函数
+            return new jQuery.fn.init(selector);
+        }
+            var jQuery = function (selector) {
+                var elements = document.querySelectorAll(selector);
+                push.apply(this, elements);
+            }
+        // 替换原型
+            jQuery.fn = jQuery.prototype = {
+                constructor: jQuery,
+                jquery: version,
+                css: function () {
+                    console.log("haha");
+                },
+                attr:function () {
+                    console.log("hehe");
+                },
+                splice: Array.prototype.splice,
+                extend: function (obj) {
+                    //把对象中所有的属性和方法添加到自己身上即可.
+                    for(var k in obj) {
+                    //判断k是否是obj自己的属性
+                    if(obj.hasOwnProperty(k)) {
+                        this[k] = obj[k];
+                    }
+                }
+            }
+        }
+        
+        //给jQuery原型扩展样式相关的方法
+        jQuery.fn.extend({
+            addClass:function () {
+                //遍历this，给每一个元素都添加上 name
+                for(var i = 0; i < this.length; i++) {
+                    this[i].classList.add(name);
+                }
+                //返回this，保证能够链式编程
+                return this;
+            },
+            removeClass:function () {
+                //遍历this，给每一个元素都添加上 name
+                    for(var i = 0; i < this.length; i++) {
+                this[i].classList.remove(name);
+                }
+                //返回this，保证能够链式编程
+                return this;
+            },
+            hasClass:function () {
+                //遍历this，判断是否有某个元素包含了name，只要有一个，就返回true，如果都没有，就返回false
+                for(var i = 0; i < this.length; i++) {
+                //只要有一个包含，return true
+                    if( this[i].classList.contains(name) ){
+                        return true;
+                    }
+                }
+                //都不包含：return false
+                return false;
+            },
+            toggleClass:function () {
+
+            },
+            css:function () {
+
+            },
+        });
+
+            
+            jQuery.fn.init = function (selector) {
+                var elements = document.querySelectorAll(selector);
+                push.apply(this, elements);
+            }
+
+            jQuery.fn.init.prototype = jQuery.fn;
+        // 对外暴露jQuery
+            window.jQuery = window.$ = jQuery;
+        })(window);
+
+        var aa = new $("div");
+        console.log(aa);
+        
+    </script>
+</body>
+</html>
